@@ -9,7 +9,14 @@
 
 
   workbench
-  
+  root -> mysql일 경우
+  CREATE DATABASE boardProject;
+
+day01_작업 내용
+작업 내용
+
+스프링 시큐리티 - 기본
+타임리스 기본 레이아웃
 
 
 2. URL 구성 및 엔티티, 레포지토리 설계
