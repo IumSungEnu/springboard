@@ -1,6 +1,7 @@
 package org.koreait.controllers.members;
 
 import lombok.RequiredArgsConstructor;
+import org.koreait.commons.validators.MobileValidator;
 import org.koreait.repositories.MemberRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -8,7 +9,7 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class JoinValidator implements Validator {
+public class JoinValidator implements Validator, MobileValidator {
 
     private final MemberRepository memberRepository;
 
@@ -27,6 +28,28 @@ public class JoinValidator implements Validator {
          * 5. 휴대전화번호가 입력된 경우 숫자만 추출해서 다시 커맨드 객체에 저장
          * 6. 필수 약관 동의 체크
          */
+
+        JoinForm joinForm = (JoinForm) target;
+        //재료를 가지고 온다(데이터)
+        String userId = joinForm.getUserId();
+        String userPw = joinForm.getUserPw();
+        String userPwRe = joinForm.getUserPwRe();
+        String mobile = joinForm.getMobile();
+        //email -> bean 객체로 부여했기 때문에 굳이 쓸 필요 x
+
+        // 1. 아이디 중복 여부
+        if(userId != null && userId.isBlank() && memberRepository.exists(userId)){
+            errors.rejectValue("userId", "Validation.duplicate.userId");
+        }
+
+        // 3. 비밀번호와 비밀번호 확인 일치
+        if(userPw != null && !userPw.isBlank() &&
+                userPwRe != null && !userPwRe.isBlank() && !userPw.equals(userPwRe)){
+            errors.rejectValue("userPwRe", "Validation.incorrect.userPwRe");
+        }
+
+        // 4. 휴대전화(선택사항) - 입력된 경우 형식 체크
+
     }
 }
 
