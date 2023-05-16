@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 @Component
 public class SiteConfigInterceptor implements HandlerInterceptor {
+    //공통 부분
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
