@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.koreait.commons.constants.Role;
 
 @Entity @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -35,4 +36,8 @@ public class Member extends BaseEntity{ //회원가입 엔티티
     
     @Lob
     private String termsAgree; //약관 동의 내역 -> json 형태로 사용
+    
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
+    private Role roles = Role.USER;  // 사용자 권한 - 기본값 USER
 }
