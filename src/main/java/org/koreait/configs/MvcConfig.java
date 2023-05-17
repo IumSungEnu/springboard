@@ -46,7 +46,8 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**");
     }
 
-    //메세지 부분
+    //메세지 부분 - 한글깨짐 방지
+    @Bean
     public MessageSource messageSource(){
         ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
         ms.setDefaultEncoding("UTF-8");
