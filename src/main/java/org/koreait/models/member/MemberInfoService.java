@@ -38,6 +38,7 @@ public class MemberInfoService implements UserDetailsService {
                 .userNm(member.getUserNm())
                 .email(member.getEmail())
                 .mobile(member.getMobile())
+                .roles(member.getRoles())   //roles 추가
                 .authorities(authorities)   //추가
                 .build();
     }
