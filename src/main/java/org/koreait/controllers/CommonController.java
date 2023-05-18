@@ -28,6 +28,8 @@ public class CommonController {
         model.addAttribute("message", e.getMessage());
         model.addAttribute("exception", e);
 
+        e.printStackTrace();  //콘솔에 오류가 출력될수 있도록. (정보확인을 위해)
+
         return "error/common";
     }
 }
