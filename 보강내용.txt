@@ -22,3 +22,8 @@ day01_작업 내용
 2. URL 구성 및 엔티티, 레포지토리 설계
 3. 1스프링 시큐리티를 이용한 회원가입 및 로그인 구현
 
+
+아이콘 사이트
+xeicon
+http://xpressengine.github.io/XEIcon/
+

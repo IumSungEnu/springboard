@@ -21,7 +21,6 @@ public class CommonController {
 
         response.setStatus(status);
         String URL = request.getRequestURI();
-        System.out.println(URL);
 
         model.addAttribute("status", status);
         model.addAttribute("path", URL);
@@ -33,3 +32,5 @@ public class CommonController {
         return "error/common";
     }
 }
+
+//템플릿 부분

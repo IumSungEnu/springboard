@@ -26,3 +26,7 @@ public class CommonRestController {
         return ResponseEntity.status(status).body(jsonData);
     }
 }
+
+//JSON 데이터를 사용하기 위해.
+//성공이든 실패든 통제를 통해
+

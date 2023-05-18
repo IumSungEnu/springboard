@@ -25,7 +25,6 @@
       - SecurityContextHolder
         - getContext().getAuthentication()
         - Object getPrincipal() : 비회원 (String) : anonymousUser, 회원 : UserDetails 구현 객체
-
 * 기본 에러 응답 코드 처리
   - 템플릿 경로 /error/응답코드.html
     - timestamp - 오류 발생 시각
@@ -35,7 +34,6 @@
     - errors - Error 객체
     - trace - printStackTrace()
     - path - 오류의 유입 URL
-
 * 공통 오류 페이지
   - @ExceptionHandler, @ControllerAdvice, @RestControllerAdvice
 
@@ -47,5 +45,7 @@
     - 일반 요청 응답과 오류 통일성 있게 처리(JSONData)
 * 관리자페이지
   - 사이트 설정
+    - 추후에 설정이 많이 추가됨을 고려
+    - CodeValue 엔티티 code(PK), value - JSON
   - 게시판 설정
   
