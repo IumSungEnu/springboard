@@ -27,17 +27,16 @@ public class SiteConfigInterceptor implements HandlerInterceptor {
         /** 사이트 설정 조회 */
         Map<String, String> siteConfigs = infoService.get("siteConfig", new TypeReference<Map<String, String>>() {});
 
-        if(siteConfigs == null){
+        if (siteConfigs == null) {
             siteConfigs = new HashMap<>();
             siteConfigs.put("siteTitle", "");
             siteConfigs.put("siteDescription", "");
             siteConfigs.put("cssJsVersion", "" + 1);
             siteConfigs.put("joinTerms", "");
         }
+
         request.setAttribute("siteConfig", siteConfigs);
 
         return true;
     }
-
-
 }

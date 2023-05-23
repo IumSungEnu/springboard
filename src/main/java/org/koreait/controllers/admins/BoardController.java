@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.commons.CommonException;
 import org.koreait.commons.MenuDetail;
 import org.koreait.commons.Menus;
-import org.koreait.commons.constants.Role;
 import org.koreait.entities.Board;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardConfigListService;
@@ -26,7 +25,7 @@ import java.util.List;
 public class BoardController {
 
     private final HttpServletRequest request;
-    private final BoardConfigSaveService configSaveService;  //추가
+    private final BoardConfigSaveService configSaveService;
     private final BoardConfigInfoService boardConfigInfoService;
     private final BoardConfigListService boardConfigListService;
 
@@ -40,7 +39,7 @@ public class BoardController {
         commonProcess(model, "게시판 목록");
 
         Page<Board> data = boardConfigListService.gets(boardSearch);
-        model.addAttribute("items", data.getContent());  //주입
+        model.addAttribute("items", data.getContent());
 
         return "admin/board/index";
     }
@@ -52,6 +51,7 @@ public class BoardController {
     @GetMapping("/register")
     public String register(@ModelAttribute BoardForm boardForm, Model model) {
         commonProcess(model, "게시판 등록");
+
         return "admin/board/config";
     }
 
@@ -73,9 +73,8 @@ public class BoardController {
         return "admin/board/config";
     }
 
-    //설정저장, 수정(추가)
     @PostMapping("/save")
-    public String save(@Valid BoardForm boardForm, Errors errors, Model model){
+    public String save(@Valid BoardForm boardForm, Errors errors, Model model) {
         String mode = boardForm.getMode();
         commonProcess(model, mode != null && mode.equals("update") ? "게시판 수정" : "게시판 등록");
 
@@ -89,7 +88,8 @@ public class BoardController {
             return "admin/board/config";
         }
 
-        return "redirect:/admin/board";  //게시판 목록
+
+        return "redirect:/admin/board"; // 게시판 목록
     }
 
     private void commonProcess(Model model, String title) {

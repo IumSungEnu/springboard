@@ -1,16 +1,13 @@
-<!-- write, update에 추가될 폼 -->
 <!DOCTYPE html>
-<html xmlns:th="http:www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="form">
-        <input th:if="${board.useAttachImage && board.useAttachFile}" type="file" id="file" class="dn">
+        <input th:if="${board.useAttachImage && board.useAttachFile }" type="file" id="file" class="dn">
         <dl>
-            <dt th:text="#{board.poster}">
+            <dt th:text="#{board.poster}"></dt>
             <dd>
                 <input type="text" name="poster">
             </dd>
-            </dt>
         </dl>
-        <!-- 비회원일때 비밀번호 노출 -->
         <dl th:if="${board.isGuest == true}">
             <dt th:text="#{board.password}"></dt>
             <dd>
@@ -21,7 +18,8 @@
             <dt th:text="#{board.category}"></dt>
             <dd>
                 <th:block th:each="category, status : ${board.categories}">
-                    <input type="radio" name="category" th:value="${category}" th:id="${'vategory_' + status.index}">
+                    <input type="radio" name="category" th:value="${category}"
+                           th:id="${'category_' + status.index}">
                     <label th:for="${'category_' + status.index}" th:text="${category}"></label>
                 </th:block>
             </dd>
@@ -38,12 +36,10 @@
                 <textarea name="content" id="content"></textarea>
                 <th:block th:if="${board.useEditor && board.useAttachImage}">
                     <button type="button" class="attachFiles image" th:text="#{board.attach.image}"></button>
-                    <div class="attachedFiles image"></div> <!-- 이미지 파일 첨부 -->
+                    <div class="attachedFiles images"></div>
                 </th:block>
             </dd>
         </dl>
-
-        <!-- 파일 첨부 -->
         <dl th:if="${board.useAttachFile == true}">
             <dt th:text="#{board.attach.file}"></dt>
             <dd>
@@ -51,5 +47,6 @@
                 <div class="attachedFiles files"></div>
             </dd>
         </dl>
+
     </th:block>
 </html>

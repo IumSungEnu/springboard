@@ -1,0 +1,29 @@
+추가 강의
+
+1일차
+
+1. 스프링 부트 설정
+- 오라클 driver / mysql driver
+- querydsl 의존성 / 설정
+- ModelMapper 
+
+
+  workbench
+  root -> mysql일 경우
+  CREATE DATABASE boardProject;
+
+day01_작업 내용
+작업 내용
+
+스프링 시큐리티 - 기본
+타임리스 기본 레이아웃
+
+
+2. URL 구성 및 엔티티, 레포지토리 설계
+3. 1스프링 시큐리티를 이용한 회원가입 및 로그인 구현
+
+
+아이콘 사이트
+xeicon
+http://xpressengine.github.io/XEIcon/
+

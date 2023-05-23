@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BoardDataSaveService {
-    public void save(BoardForm boardForm){
+    public void save(BoardForm boardForm) {
 
     }
 }

@@ -1,8 +1,12 @@
-/** 게시판 양식 공통 - 글쓰기, 수정 */
+/**
+* 게시판 작성, 수정 양식 공통 스크립트
+*
+*/
+
 window.addEventListener("DOMContentLoaded", function() {
-    try{ //에디터를 사용하는 경우
+    try {
         CKEDITOR.replace("content", {
-                    height: 350,
-                });
-            } catch(e) {}
+            height: 350,
         });
+    } catch(e) {}
+});

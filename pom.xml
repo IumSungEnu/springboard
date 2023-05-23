@@ -41,7 +41,10 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49a2500cdf0b3707674bdd4be9b4c9cdb9dc25fd
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -85,6 +88,10 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>3.2.1</version>
 		</dependency>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 49a2500cdf0b3707674bdd4be9b4c9cdb9dc25fd
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
