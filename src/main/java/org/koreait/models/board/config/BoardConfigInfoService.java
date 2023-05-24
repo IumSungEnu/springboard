@@ -68,14 +68,11 @@ public class BoardConfigInfoService {
 
         } else if (location.equals("comment")) { // 댓글 권한
             role = board.getCommentAccessRole();
-
         }
 
         if ((role == Role.USER && !memberUtil.isLogin())
                 || (role == Role.ADMIN && !memberUtil.isAdmin())) {
             throw new BoardNotAllowAccessException();
         }
-
-
     }
 }
