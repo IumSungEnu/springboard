@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class BoardForm {
+public class BoardForm {  //커맨드 객체
     private Long id; // 게시글 번호
 
     @NotBlank
@@ -21,7 +21,7 @@ public class BoardForm {
 
     @NotBlank
     private String poster; // 작성자
-    private String guestPw; // 비회원 비밀번호
+    private String guestPw; // 비회원 비밀번호 -> 선택적 필수
     private String category; // 게시판 분류
 
     @NotBlank
