@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.koreait.commons.configs.ConfigSaveService;
+import org.koreait.controllers.admins.ConfigForm;
 import org.koreait.controllers.boards.BoardForm;
 import org.koreait.controllers.members.JoinForm;
 import org.koreait.entities.Board;
@@ -18,11 +20,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,16 +51,26 @@ public class BoardSaveTests {
     @Autowired
     private MemberSaveService memberSaveService;
 
+    @Autowired
+    private ConfigSaveService siteConfigSaveService;
+
     private Board board;
 
     private JoinForm joinForm;
 
+    @Autowired
+    private MockMvc mockMvc;
+
+
     @BeforeEach
     @Transactional
     void init() {
+        //사이트 설정 등록
+        siteConfigSaveService.save("siteConfig", new ConfigForm());
+
         // 게시판 설정 추가
         org.koreait.controllers.admins.BoardForm boardForm = new org.koreait.controllers.admins.BoardForm();
-        boardForm.setBId("freetalk");
+        boardForm.setBId("freetalk1000" );
         boardForm.setBName("자유게시판");
         configSaveService.save(boardForm);
         board = configInfoService.get(boardForm.getBId(), true);
@@ -219,5 +237,18 @@ public class BoardSaveTests {
     @WithMockUser(username = "user01", password = "aA!123456")
     void requiredFieldMemberTest(){
         commonRequiredFieldsTest();
+    }
+    
+    @Test
+    @DisplayName("통합테스트 - 비회원 게시글 작성 유효성 검사")
+    @Disabled
+    void requiredFieldGuestControllerTest() throws Exception {
+        BoardForm boardForm = getGuestBoardForm();
+        //응답 데이터를 받아야 한다.
+        mockMvc.perform(post("/board/save")
+                .param("bId",boardForm.getBId())
+                .param("gid", boardForm.getGid())
+                        .with(csrf().asHeader()))  //추가하지 않으면 통과되지 않는다.
+                .andDo(print());
     }
 }

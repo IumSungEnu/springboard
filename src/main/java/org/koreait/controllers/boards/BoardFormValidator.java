@@ -35,3 +35,6 @@ public class BoardFormValidator implements Validator {
         }
     }
 }
+
+//프론트부분에서 보여주기 위한 validator입니다.
+//아래는 비밀번호를 입력하지 않을시 오류메세지를 보여주기 위한 기능입니다.
