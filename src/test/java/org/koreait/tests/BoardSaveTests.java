@@ -66,7 +66,7 @@ public class BoardSaveTests {
     @Transactional
     void init() {
         //사이트 설정 등록
-        siteConfigSaveService.save("siteConfig", new ConfigForm());
+        //siteConfigSaveService.save("siteConfig", new ConfigForm());
 
         // 게시판 설정 추가
         org.koreait.controllers.admins.BoardForm boardForm = new org.koreait.controllers.admins.BoardForm();
@@ -236,12 +236,12 @@ public class BoardSaveTests {
     @DisplayName("필수 항목 검증(회원) bId, gid, poster, subject, content, BoardValidationException이 발생")
     @WithMockUser(username = "user01", password = "aA!123456")
     void requiredFieldMemberTest(){
+
         commonRequiredFieldsTest();
     }
     
     @Test
     @DisplayName("통합테스트 - 비회원 게시글 작성 유효성 검사")
-    @Disabled
     void requiredFieldGuestControllerTest() throws Exception {
         BoardForm boardForm = getGuestBoardForm();
         //응답 데이터를 받아야 한다.
