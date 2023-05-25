@@ -23,14 +23,18 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+
+import java.util.Arrays;
+import java.util.ResourceBundle;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -70,7 +74,7 @@ public class BoardSaveTests {
 
         // 게시판 설정 추가
         org.koreait.controllers.admins.BoardForm boardForm = new org.koreait.controllers.admins.BoardForm();
-        boardForm.setBId("freetalk1000" );
+        boardForm.setBId("freetalk1000");
         boardForm.setBName("자유게시판");
         configSaveService.save(boardForm);
         board = configInfoService.get(boardForm.getBId(), true);
@@ -97,7 +101,7 @@ public class BoardSaveTests {
 
     }
 
-   // @WithMockUser(username="user01", password="aA!123456")
+    // @WithMockUser(username="user01", password="aA!123456")
     private BoardForm getCommonBoardForm() {
         return BoardForm.builder()
                 .bId(board.getBId())
@@ -122,14 +126,14 @@ public class BoardSaveTests {
     @DisplayName("게시글 등록(회원) 성공시 예외 없음")
     @WithMockUser(username = "user01", password = "aA!123456")
     @Disabled
-    void registerMemberSuccessTest(){ //회원 게시글일때 
+    void registerMemberSuccessTest() { //회원 게시글일때
         assertDoesNotThrow(() -> {
             saveService.save(getCommonBoardForm());
         });
     }
 
     //공통(회원, 비회원)유효성 체크
-    private void commonRequiredFieldsTest(){
+    private void commonRequiredFieldsTest() {
         assertAll(
                 //bId - null일때
                 () -> assertThrows(BoardValidationException.class, () -> {
@@ -206,7 +210,7 @@ public class BoardSaveTests {
     @Test
     @WithAnonymousUser
     @DisplayName("필수 항목 검증(비회원) - bId, gid, poster, subject, content, guestPw(자리수는 6자리 이상), BoardValidationException이 발생")
-    void requiredFieldGuestTest(){
+    void requiredFieldGuestTest() {
         commonRequiredFieldsTest();
 
         assertAll(
@@ -235,20 +239,39 @@ public class BoardSaveTests {
     @Test
     @DisplayName("필수 항목 검증(회원) bId, gid, poster, subject, content, BoardValidationException이 발생")
     @WithMockUser(username = "user01", password = "aA!123456")
-    void requiredFieldMemberTest(){
+    void requiredFieldMemberTest() {
 
         commonRequiredFieldsTest();
     }
-    
+
     @Test
     @DisplayName("통합테스트 - 비회원 게시글 작성 유효성 검사")
+    @Disabled
     void requiredFieldGuestControllerTest() throws Exception {
         BoardForm boardForm = getGuestBoardForm();
         //응답 데이터를 받아야 한다.
-        mockMvc.perform(post("/board/save")
-                .param("bId",boardForm.getBId())
-                .param("gid", boardForm.getGid())
+        String body = mockMvc.perform(post("/board/save")
+                        .param("bId", boardForm.getBId())
+                        .param("gid", boardForm.getGid())
                         .with(csrf().asHeader()))  //추가하지 않으면 통과되지 않는다.
-                .andDo(print());
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ResourceBundle bundle = ResourceBundle.getBundle("messages.validations");
+        String[] messages = {
+                bundle.getString("NotBlank.boardForm.poster"),
+                bundle.getString("NotBlank.boardForm.subject"),
+                bundle.getString("NotBlank.boardForm.content"),
+                bundle.getString("NotBlank.boardForm.guestPw"),
+                bundle.getString("Size.boardForm.guestPw")
+
+                //문구가 바뀌면 실패할 수도 있기 때문에...
+        };
+
+        for (String message : messages) {
+            assertTrue(body.contains(message));
+        }
     }
 }

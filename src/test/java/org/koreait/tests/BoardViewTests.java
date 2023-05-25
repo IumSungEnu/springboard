@@ -8,6 +8,7 @@ import org.koreait.controllers.boards.BoardForm;
 import org.koreait.entities.Board;
 import org.koreait.entities.BoardData;
 import org.koreait.models.board.BoardDataInfoService;
+import org.koreait.models.board.BoardDataNotExistException;
 import org.koreait.models.board.BoardDataSaveService;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardConfigSaveService;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -70,6 +71,14 @@ public class BoardViewTests {
     void getBoardDataSuccessTest(){
         assertDoesNotThrow(() -> {
             infoService.get(id);
+        });
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 게시글이면 BoardDataNotExistException 발생")
+    void getBoardDataNotExistsTest(){
+        assertThrows(BoardDataNotExistException.class, () -> {
+            infoService.get(id + 10);
         });
     }
 }
