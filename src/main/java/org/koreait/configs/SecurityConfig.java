@@ -20,6 +20,8 @@ import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
+    
+    //로그인 & 로그아웃 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -55,11 +57,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //정적 설정
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return w -> w.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/errors/**");
     }
 
+    //비밀번호 설정
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
