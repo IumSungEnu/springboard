@@ -41,6 +41,7 @@ public class BoardConfigInfoService {
     }
 
     public Board get(String bId, boolean isAdmin) {
+
         return get(bId, isAdmin, null);
     }
 
@@ -54,7 +55,7 @@ public class BoardConfigInfoService {
         /**
          * use - false : 모든 항목 접근 불가, 단 관리자만 가능
          */
-        if(!board.isUse() && !memberUtil.isAdmin()){ //관리자가 아니고 게시판이 사용중이 아닐대
+        if(!board.isUse() && !memberUtil.isAdmin()){ //관리자가 아니고 게시판이 사용중이 아닐때
             throw new BoardNotAllowAccessException();            
         }
 

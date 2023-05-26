@@ -94,4 +94,6 @@
 
 ## 10일차
   - 게시글 보기
+  - 조회수 구현
+    - 현재 IP + 브라우저 정보(UserAgent) + 회원번호(없으면 비회원, 있으면 회원) -> hashcode -> Objects.hashcode
   - 파일업로드
