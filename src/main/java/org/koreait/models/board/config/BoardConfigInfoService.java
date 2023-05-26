@@ -50,6 +50,14 @@ public class BoardConfigInfoService {
      * @param board
      */
     private void accessCheck(Board board, String location) {
+
+        /**
+         * use - false : 모든 항목 접근 불가, 단 관리자만 가능
+         */
+        if(!board.isUse() && !memberUtil.isAdmin()){ //관리자가 아니고 게시판이 사용중이 아닐대
+            throw new BoardNotAllowAccessException();            
+        }
+
         Role role = Role.ALL;
         if (location.equals("list")) { // 목록 접근 권한
             role = board.getListAccessRole();
