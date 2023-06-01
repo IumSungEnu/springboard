@@ -200,7 +200,6 @@ public class BoardController {
                 && memberUtil.getMember().getUserNo() != boardData.getMember().getUserNo()){
             throw new BoardNotAllowAccessException();
         }
-
     }
 
     public void updateDeletePossibleCheck(Long id){

@@ -14,6 +14,7 @@ public class BoardFormValidator implements Validator {
     
     @Override
     public boolean supports(Class<?> clazz) {
+
         return BoardForm.class.isAssignableFrom(clazz);
     }
 

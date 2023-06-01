@@ -15,6 +15,7 @@ public class BoardConfigInfoService {
     private final MemberUtil memberUtil;
 
     public Board get(String bId, String location) { // 프론트, 접근 권한 체크
+
         return get(bId, false, location);
     }
 
