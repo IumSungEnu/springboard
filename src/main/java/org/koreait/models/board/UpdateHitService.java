@@ -43,9 +43,12 @@ public class UpdateHitService {
     private int getUid(){
         String ip = request.getRemoteAddr();
         String ua = request.getHeader("User-Agent");
-        Long userNo = memberUtil.isLogin() ? memberUtil.getMember().getUserNo() : 0L;
+        //Long userNo = memberUtil.isLogin() ? memberUtil.getMember().getUserNo() : 0L;
         //0 : 비회원, 숫자 : 회원
+        return memberUtil.isLogin() ? memberUtil.getMember().getUserNo().intValue() : Objects.hash(ip, ua);
+        //로그인했을때는 회원번호로 / 비로그인 상태일때 현재사용하고 있는 브라우저 ip로..
 
-        return Objects.hash(ip, ua, userNo);
+        //return Objects.hash(ip, ua, userNo);
+        //회원일때는 userNo는 ip가 달라져도 명확하게 누구인지 알수있다.
     }
 }

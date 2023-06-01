@@ -7,10 +7,14 @@ import org.koreait.commons.CommonException;
 import org.koreait.commons.MemberUtil;
 import org.koreait.entities.Board;
 import org.koreait.entities.BoardData;
+import org.koreait.entities.Member;
 import org.koreait.models.board.BoardDataInfoService;
 import org.koreait.models.board.BoardDataSaveService;
 import org.koreait.models.board.UpdateHitService;
 import org.koreait.models.board.config.BoardConfigInfoService;
+import org.koreait.models.board.config.BoardNotAllowAccessException;
+import org.koreait.models.member.MemberInfo;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,7 +76,20 @@ public class BoardController {
      */
     @GetMapping("/{id}/update")
     public String update(@PathVariable Long id, Model model) {
-        commonProcess(null, "update", model);
+
+        //업데이트 조회
+        BoardData boardData = infoService.get(id, "update");
+        board = boardData.getBoard();
+        commonProcess(board.getBId(), "update", model);
+        
+        //수정권한 체크
+        updateDeletePossibleCheck(boardData);
+
+        BoardForm boardForm = new ModelMapper().map(boardData, BoardForm.class);
+        if(boardData.getMember() == null){
+            board.setGuest(true);  //회원이 없으면 게스트 모드
+        }
+        model.addAttribute("boardForm", boardForm);
 
         return "board/update";
     }
@@ -80,8 +97,21 @@ public class BoardController {
     @PostMapping("/save")
     public String save(@Valid BoardForm boardForm, Errors errors, Model model) {
         Long id = boardForm.getId();
-        String mode = id == null ? "write" : "update";
+        String mode = "write";
+        if(id != null){
+            mode = "update";
+            BoardData boardData = infoService.get(id);  //회원정보가 담겨있다.
+            board = boardData.getBoard();
+            if(boardData.getMember() == null){
+                board.setGuest(true);
+            } else {
+                boardForm.setUserNo(boardData.getMember().getUserNo());
+            }
+
+            updateDeletePossibleCheck(boardData);
+        }
         commonProcess(boardForm.getBId(), mode, model);
+
 
         formValidator.validate(boardForm, errors);
 
@@ -103,7 +133,7 @@ public class BoardController {
     @GetMapping("/view/{id}")
     public String view(@PathVariable Long id, Model model) {
         BoardData boardData = infoService.get(id);
-        Board board = boardData.getBoard();
+        board = boardData.getBoard();
 
         commonProcess(board.getBId(), "view", model);
 
@@ -152,6 +182,32 @@ public class BoardController {
         model.addAttribute("addScript", addScript); // JS 설정
 
     }
+
+    /**
+     * 수정, 삭제 권한 체크
+     *
+     * - 회원 : 작성한 회원
+     * - 비회원 : 비밀번호 검증
+     * - 관리자 : 가능
+     */
+    public void updateDeletePossibleCheck(BoardData boardData){
+        if(memberUtil.isAdmin()){  //관리자는 무조건 가능
+            return;
+        }
+
+        // 글을 작성한 회원쪽만 가능하게 통제
+        if(memberUtil.isLogin() 
+                && memberUtil.getMember().getUserNo() != boardData.getMember().getUserNo()){
+            throw new BoardNotAllowAccessException();
+        }
+
+    }
+
+    public void updateDeletePossibleCheck(Long id){
+        BoardData boardData = infoService.get(id, "update");
+        updateDeletePossibleCheck(boardData);
+    }
+
 
     @ExceptionHandler(CommonException.class)
     public String errorHandler(CommonException e, Model model) {

@@ -23,7 +23,13 @@ public class BoardFormValidator implements Validator {
         /**
          * 비회원 비밀번호 체크
          */
-        if(!memberUtil.isLogin()){  //비회원 상태일태
+        //비회원 상태일태
+        Long id = boardForm.getId();
+        Long userNo = boardForm.getUserNo();
+
+        if((id == null && !memberUtil.isLogin())     // 글 작성시 비회원
+                || (id != null && userNo == null)){  // 글 수정시 비회원
+
             String guestPw = boardForm.getGuestPw();
             if(guestPw == null || guestPw.isBlank()){  //비밀번호
                 errors.rejectValue("guestPw", "NotBlank");

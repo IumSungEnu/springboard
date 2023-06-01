@@ -15,12 +15,17 @@ public class BoardDataInfoService {
     private final BoardDataRepository boardDataRepository;
     private final BoardConfigInfoService configInfoService;
 
-    public BoardData get(Long id) {
+    //많이 사용하는 조회
+    public BoardData get(Long id){
+        return get(id, "view");
+    }
+
+    public BoardData get(Long id, String location) {
         //게시글이 없으면 던진다.
         BoardData boardData = boardDataRepository.findById(id).orElseThrow(BoardDataNotExistException::new);
 
         //게시판 설정 조회 + 접근 권한체크
-        configInfoService.get(boardData.getBoard().getBId(), "view");
+        configInfoService.get(boardData.getBoard().getBId(), location);
         
         return boardData;
     }

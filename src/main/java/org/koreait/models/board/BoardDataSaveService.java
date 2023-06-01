@@ -58,8 +58,17 @@ public class BoardDataSaveService {
             } else {  //비회원 비밀번호
                 boardData.setGuestPw(passwordEncoder.encode(boardForm.getGuestPw()));
             }
-        } else {  //게시글 수정
 
+        } else {  //게시글 수정
+            boardData = repository.findById(boardForm.getId()).orElseThrow(BoardDataNotExistException::new);
+            boardData.setPoster(boardForm.getPoster());
+            boardData.setSubject(boardForm.getSubject());
+            boardData.setContent(boardForm.getContent());
+            boardData.setCategory(boardForm.getCategory());
+            String guestPw = boardForm.getGuestPw();
+            if(boardData.getMember() == null && guestPw != null && !guestPw.isBlank()){
+                boardData.setGuestPw(passwordEncoder.encode(guestPw));
+            }
         }
 
         boardData = repository.saveAndFlush(boardData);
