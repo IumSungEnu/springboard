@@ -1,6 +1,7 @@
 package org.koreait.controllers.boards;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.commons.CommonException;
@@ -8,9 +9,7 @@ import org.koreait.commons.MemberUtil;
 import org.koreait.entities.Board;
 import org.koreait.entities.BoardData;
 import org.koreait.entities.Member;
-import org.koreait.models.board.BoardDataInfoService;
-import org.koreait.models.board.BoardDataSaveService;
-import org.koreait.models.board.UpdateHitService;
+import org.koreait.models.board.*;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardNotAllowAccessException;
 import org.koreait.models.member.MemberInfo;
@@ -36,6 +35,9 @@ public class BoardController {
     private final MemberUtil memberUtil;
     private final BoardDataInfoService infoService;
     private final UpdateHitService updateHitService;
+    private final GuestPasswordCheckService passwordCheckService;
+    private final HttpSession session;
+
     
     private Board board; //게시판 설정
 
@@ -146,6 +148,29 @@ public class BoardController {
         return "board/view";
     }
 
+    @PostMapping("/password")
+    public String password(String password){
+
+        String mode = (String) session.getAttribute("guestPwMode");
+        Long id = (Long) session.getAttribute("guestPwId");
+
+        // 비회원 비밀번호 검증
+        passwordCheckService.check(id, password, mode);
+
+        // 비회원 비밀번호 검증 완료 처리
+        session.setAttribute(mode + "_" + id, true);
+
+        // 비회원 비밀번호 확인 후 이동 경로
+        String url = mode == "comment" ? "/board/" + id + "/comment" : "/board/" + id + "/update";
+
+
+        // 검증 완료후 세션 제거
+        session.removeAttribute("guestPwMode");
+        session.removeAttribute("guestPwId");
+
+        return "redirect:" + url;
+    }
+
     private void commonProcess(String bId, String action, Model model) {
         /**
          * 1. bId 게시판 설정 조회
@@ -195,10 +220,29 @@ public class BoardController {
             return;
         }
 
-        // 글을 작성한 회원쪽만 가능하게 통제
-        if(memberUtil.isLogin() 
-                && memberUtil.getMember().getUserNo() != boardData.getMember().getUserNo()){
-            throw new BoardNotAllowAccessException();
+        Member member = boardData.getMember();
+
+        if(member == null){ //비회원일때는 비밀번호 검증이 되었는지 체크, 안되어 있다면 비밀번호 확인 페이지 이동
+            /**
+             * 세션 키 - "board_게시글 번호"가 있으면 비회원 비밀번호 검증 완료
+             */
+            if(session.getAttribute("board_" +boardData.getId()) == null){
+                /**
+                 * 1. 위치 - 일반 게시글이면 : board, 댓글이면 comment
+                 * 2. 게시글 번호
+                 */
+
+                session.setAttribute("guestPwMode", "board");
+                session.setAttribute("guestPwId", boardData.getId());
+
+                throw new GuestPasswordNotCheckedException();  //하단예외처리에서 비밀번호 확인 페이지 노출
+            }
+
+        }else {// 글을 작성한 회원쪽만 가능하게 통제
+            if(memberUtil.isLogin()
+                    && memberUtil.getMember().getUserNo() != boardData.getMember().getUserNo()){
+                throw new BoardNotAllowAccessException();
+            }
         }
     }
 
@@ -215,6 +259,10 @@ public class BoardController {
         String message = e.getMessage();
         HttpStatus status = e.getStatus();
         response.setStatus(status.value());
+
+        if(e instanceof GuestPasswordNotCheckedException){ //비회원 비밀번호 검증 관련 예외
+            return "board/password";
+        }
 
         String script = String.format("alert('%s');history.back();", message);
         model.addAttribute("script", script);
