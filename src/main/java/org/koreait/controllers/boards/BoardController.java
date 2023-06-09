@@ -12,7 +12,6 @@ import org.koreait.entities.Member;
 import org.koreait.models.board.*;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardNotAllowAccessException;
-import org.koreait.models.member.MemberInfo;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -223,6 +222,7 @@ public class BoardController {
             if (board.isUseEditor()) { // 에디터 사용 경우
                 addScript.add("ckeditor/ckeditor");
             }
+            addScript.add("fileManager");
             addScript.add("board/form");
         }
 
@@ -277,6 +277,7 @@ public class BoardController {
     }
 
     public void updateDeletePossibleCheck(BoardData boardData){
+
         updateDeletePossibleCheck(boardData, null);
     }
 
