@@ -4,15 +4,15 @@
       layout:decorate="~{layouts/front/main}">
     <main layout:fragment="content">
         <form name="frmLogin" method="post" th:action="@{/member/login}" autocomplete="off">
-            <div>
+            <div class="input-box">
                 <input type="text" name="userId" th:placeholder="#{userId}" th:value="${session.userId}">
                 <div class="errors" th:if="${session.requiredUserId != null}" th:text="${session.requiredUserId}"></div>
             </div>
-            <div>
+            <div class="input-box">
                 <input type="password" name="userPw" th:placeholder="#{userPw}">
                 <div class="errors" th:if="${session.requiredUserPw != null}" th:text="${session.requiredUserPw}"></div>
             </div>
-            <div>
+            <div class="input-box">
                 <a th:href="@{/member/find_id}"><i class="xi-search"></i>[[#{findId}]]</a>
                 <a th:href="@{/member/find_pw}"><i class="xi-search"></i>[[#{findPw}]]</a>
                 <a th:href="@{/member/join}"><i class="xi-user-plus"></i>[[#{member.join}]]</a>

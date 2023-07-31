@@ -2,11 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <header th:fragment="common">
-        <section>
+        <section id="left_h">
+            <div>
+                <h1 id="logo"><a th:href="@{/}"><img src="/" width="200" height="39" alt="LOGO"/></a></h1>
+            </div>
+
+            <div class="right_h">
             <th:block sec:authorize="isAuthenticated()">
                 <span th:text="${#messages.msg('member.login.msg', session.memberInfo.userNm, session.memberInfo.userId)}"></span>
                 <a th:href="@{/member/logout}" th:text="#{member.logout}"></a>
-
                 <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}" th:text="#{adminPage}"></a>
 
             </th:block>
@@ -14,6 +18,16 @@
                 <a th:href="@{/member/join}" th:text="#{member.join}"></a>
                 <a th:href="@{/member/login}" th:text="#{member.login}"></a>
             </th:block>
+            </div>
         </section>
+
+        <nav>
+            <ul class="nav-items">
+                <li class="nav-item"><a th:href="@{/}" th:text="#{main.home}"></a></li>
+                <li class="nav-item"><a th:href="@{/main/aboutme}" th:text="#{main.aboutme}"></a></li>
+                <li class="nav-item"><a th:href="@{/main/skills}" th:text="#{main.skills}"></a></li>
+                <li class="nav-item"><a th:href="@{/main/community}" th:text="#{main.community}"></a></li>
+            </ul>
+        </nav>
     </header>
 </html>

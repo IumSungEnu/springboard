@@ -11,6 +11,7 @@ import org.koreait.entities.BoardData;
 import org.koreait.entities.Member;
 import org.koreait.models.board.*;
 import org.koreait.models.board.config.BoardConfigInfoService;
+import org.koreait.models.board.config.BoardConfigListService;
 import org.koreait.models.board.config.BoardNotAllowAccessException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardConfigInfoService boardConfigInfoService;
+    private final BoardConfigListService boardConfigListService;
     private final BoardDataSaveService saveService;  //추가, 저장
     private final BoardFormValidator formValidator;
     private final HttpServletResponse response;
@@ -48,7 +50,10 @@ public class BoardController {
      */
     @GetMapping("/list/{bId}")
     public String list(@PathVariable String bId, Model model) {
+
+
         commonProcess(bId, "list", model);
+
 
         return "board/list";
     }

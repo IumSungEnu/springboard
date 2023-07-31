@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/front/main}">
+<main layout:fragment="content">
+    <div class="">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>커뮤니티</h1>
+                <hr>
+                <table id="example" class="display" width="100%">
+                    <tr>
+                        <th th:text="#{board.index}" style="width: 10%">번호</th>
+                        <th th:text="#{board.subject}" style="width: 55%">제목</th>
+                        <th th:text="#{board.poster}" style="width: 15%">이름</th>
+                        <th th:text="#{board.datetime}" style="width: 15%">작성일</th>
+                        <th th:text="#{board.hit}" style="width: 5%">조회수</th>
+                    </tr>
+                    <tr >
+                        <td class="main_bd"></td>
+                        <td class="main_bd"></td>
+                        <td class="main_bd"></td>
+                        <td class="main_bd"></td>
+                        <td class="main_bd"></td>
+                    </tr>
+                </table>
+                <br>
+                <button type="submit" id="writeBtn">글쓰기</button>
+            </div>
+        </div>
+    </div>
+</main>
+</html>
